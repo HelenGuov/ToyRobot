@@ -27,6 +27,7 @@ internal class Program
         }; 
         var robotService = new RobotService(tableTop);
 
+        Console.WriteLine($"Table top size. Height: {tableTop.Height}, Width: {tableTop.Width}");
         while ((line = reader.ReadLine()) != null)
         {
             var command = line.Split(" ");
