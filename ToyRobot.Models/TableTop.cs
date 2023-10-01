@@ -1,6 +1,6 @@
 namespace ToyRobot.Models;
 
-public record Table
+public record TableTop
 {
     public int Width { get; init; }
     public int Height { get; init; }
