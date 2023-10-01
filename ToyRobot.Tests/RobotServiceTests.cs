@@ -14,6 +14,46 @@ public class Tests
     {
     }
 
+    [TestCase(0,0)]
+    [TestCase(0,5)]
+    [TestCase(5,0)]
+    public void GivenValidLocation_WhenPlaceRobot_ThenReturnPlacedRobot(int x, int y) 
+    {
+        var tableTop = new TableTop()
+        {
+            Width = 5,
+            Height = 5
+        };
+
+        var robotService = new RobotService(tableTop);
+        var actualRobot = robotService.PlaceRobot(x, y, Direction.North); 
+        actualRobot.IsPlaced.Should().Be(true);
+        actualRobot.XLocation.Should().Be(x);
+        actualRobot.YLocation.Should().Be(y);
+        actualRobot.Direction.Should().Be(Direction.North);
+    }
+    
+    [TestCase(-1,0)]
+    [TestCase(0,-1)]
+    [TestCase(-1,-1)]
+    [TestCase(6,0)]
+    [TestCase(0,6)]
+    public void GivenInvalidValidLocation_WhenPlaceRobot_ThenReturnPlacedRobot(int x, int y) 
+    {
+        var tableTop = new TableTop()
+        {
+            Width = 5,
+            Height = 5
+        };
+
+        var robotService = new RobotService(tableTop);
+        var actualRobot = robotService.PlaceRobot(x, y, Direction.West); 
+        actualRobot.IsPlaced.Should().Be(false);
+        actualRobot.XLocation.Should().Be(0);
+        actualRobot.YLocation.Should().Be(0);
+        actualRobot.Direction.Should().Be(Direction.North);
+    }
+
     [TestCase(0,0, "North", 0,1,"North")]
     [TestCase(0,0, "East", 1,0,"East")]
     [TestCase(0,1, "South", 0,0,"South")]
@@ -35,7 +75,8 @@ public class Tests
         {
             XLocation = inputXLocation,
             YLocation = inputYLocation,
-            Direction = inDirection
+            Direction = inDirection,
+            IsPlaced = true
         }; 
         
         var robotService = new RobotService(tableTop);
@@ -50,7 +91,7 @@ public class Tests
     [TestCase(0,0, "South", 0,0,"South")]
     [TestCase(0,5, "North", 0,5,"North")]
     [TestCase(5,0, "East", 5,0,"East")]
-    public void GivenInValid_WhenMoveRobot_ThenIgnoreNextLocationOutsideOfTableTop(
+    public void GivenInValidMove_WhenMoveRobot_ThenIgnoreNextLocationOutsideOfTableTop(
         int inputXLocation, int inputYLocation, string inputDirection, 
         int expectedXLocation, int expectedYLocation, string expectedDirection)
     {
@@ -67,7 +108,8 @@ public class Tests
         {
             XLocation = inputXLocation,
             YLocation = inputYLocation,
-            Direction = inDirection
+            Direction = inDirection,
+            IsPlaced = true
         }; 
         
         var robotService = new RobotService(tableTop);
@@ -76,5 +118,30 @@ public class Tests
         actualRobot.XLocation.Should().Be(expectedXLocation);
         actualRobot.YLocation.Should().Be(expectedYLocation);
         actualRobot.Direction.Should().Be(outDirection);
+    }
+    
+    [Test]
+    public void GivenNotPlacedRobot_WhenMoveRobot_ThenReturnDefaultRobotWithoutMovement()
+    {
+        var tableTop = new TableTop
+        {
+            Width = 5,
+            Height = 5
+        };
+
+        var robot = new Robot()
+        {
+            XLocation = 1,
+            YLocation = 1,
+            Direction = Direction.East,
+            IsPlaced = false
+        }; 
+        
+        var robotService = new RobotService(tableTop);
+        var actualRobot = robotService.MoveRobot(robot);
+        actualRobot.IsPlaced.Should().Be(false);
+        actualRobot.XLocation.Should().Be(0);
+        actualRobot.YLocation.Should().Be(0);
+        actualRobot.Direction.Should().Be(Direction.North);
     }
 }
