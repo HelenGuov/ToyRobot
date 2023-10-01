@@ -177,4 +177,28 @@ public class Tests
         var actualRobot = robotService.TurnRobot(robot, inRotation);
         actualRobot.Direction.Should().Be(outDirection);
     }
+    
+    public void GivenNotPlacedRobot_WhenTurnRobot_ReturnsDefaultRobotWithoutTurning()
+    {
+        var tableTop = new TableTop()
+        {
+            Width = 5,
+            Height = 5
+        }; 
+        
+        var robot = new Robot()
+        {
+            XLocation = 1,
+            YLocation = 2,
+            Direction = Direction.East,
+            IsPlaced = false
+        };
+
+        var robotService = new RobotService(tableTop); 
+        var actualRobot = robotService.TurnRobot(robot, Rotation.Left);
+        actualRobot.Direction.Should().Be(Direction.North);
+        actualRobot.IsPlaced.Should().Be(false);
+        actualRobot.XLocation.Should().Be(0);
+        actualRobot.YLocation.Should().Be(0);
+    }
 }
