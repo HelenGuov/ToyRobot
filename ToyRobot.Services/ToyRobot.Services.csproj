@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ToyRobot.Models\ToyRobot.Models.csproj" />
+    </ItemGroup>
+
 </Project>
