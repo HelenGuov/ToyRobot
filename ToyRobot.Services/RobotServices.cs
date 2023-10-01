@@ -6,6 +6,7 @@ public class RobotService
 {
     private readonly TableTop _tableTop;
     private readonly Dictionary<Direction, int> _robotMovements;
+    private readonly Dictionary<Direction, DirectionNeighbour> _directionNeighbour;
 
     public RobotService(TableTop tableTop)
     {
@@ -17,6 +18,14 @@ public class RobotService
             {Direction.South, -1},
             {Direction.West, -1}
         };
+
+        _directionNeighbour = new Dictionary<Direction, DirectionNeighbour>()
+        {
+            {Direction.North, new DirectionNeighbour() {Direction = Direction.North, LeftNeighbour = Direction.West, RightNeighbour = Direction.East}},
+            {Direction.East, new DirectionNeighbour() {Direction = Direction.East, LeftNeighbour = Direction.North, RightNeighbour = Direction.South}},
+            {Direction.South, new DirectionNeighbour() {Direction = Direction.South, LeftNeighbour = Direction.East, RightNeighbour = Direction.West}},
+            {Direction.West, new DirectionNeighbour() {Direction = Direction.West, LeftNeighbour = Direction.South, RightNeighbour = Direction.North}}
+        }; 
     }
 
     public Robot PlaceRobot(int x, int y, Direction direction)
@@ -36,6 +45,17 @@ public class RobotService
         }
 
         return new Robot(); 
+    }
+
+    public Robot TurnRobot(Robot robot, Rotation rotation)
+    {
+        if (!robot.IsPlaced) return robot; 
+
+        var directionNeighbour = _directionNeighbour[robot.Direction];
+        if (rotation == Rotation.Left)
+            return robot with {Direction = directionNeighbour.LeftNeighbour};
+        
+        return robot with {Direction = directionNeighbour.RightNeighbour};
     }
 
     public Robot MoveRobot(Robot robot)

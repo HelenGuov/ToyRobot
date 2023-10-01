@@ -144,4 +144,37 @@ public class Tests
         actualRobot.YLocation.Should().Be(0);
         actualRobot.Direction.Should().Be(Direction.North);
     }
+
+    [TestCase("North", "Left", "West")]
+    [TestCase("North", "Right", "East")]
+    [TestCase("East", "Left", "North")]
+    [TestCase("East", "Right", "South")]
+    [TestCase("South", "Left", "East")]
+    [TestCase("South", "Right", "West")]
+    [TestCase("West", "Left", "South")]
+    [TestCase("West", "Right", "North")]
+    public void GivenPlacedRobot_WhenTurnRobot_ReturnsRobotInNewDirection(string currentDirection, string rotation, string expectedDirection)
+    {
+        var inDirection = Enum.Parse<Direction>(currentDirection);
+        var outDirection = Enum.Parse<Direction>(expectedDirection);
+        var inRotation = Enum.Parse<Rotation>(rotation);
+        
+        var tableTop = new TableTop()
+        {
+            Width = 5,
+            Height = 5
+        }; 
+        
+        var robot = new Robot()
+        {
+            XLocation = 0,
+            YLocation = 0,
+            Direction = inDirection,
+            IsPlaced = true
+        };
+
+        var robotService = new RobotService(tableTop); 
+        var actualRobot = robotService.TurnRobot(robot, inRotation);
+        actualRobot.Direction.Should().Be(outDirection);
+    }
 }
