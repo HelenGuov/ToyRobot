@@ -54,8 +54,10 @@ public class RobotService
     private int CalculateNextLocation(int currrentLocation, int maxLocation, Direction direction)
     {
         var newLocation = currrentLocation + _robotMovements[direction];
-        if (newLocation >= 0 && newLocation <= maxLocation)
+        if (IsValidLocation(newLocation, maxLocation))
             return newLocation;
         return currrentLocation; 
     }
+
+    private bool IsValidLocation(int location, int maxLocation) => (location >= 0 && location <= maxLocation); 
 }
