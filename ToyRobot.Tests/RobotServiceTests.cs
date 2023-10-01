@@ -46,4 +46,35 @@ public class Tests
         actualRobot.Direction.Should().Be(outDirection);
     }
     
+    [TestCase(0,0, "West", 0,0, "West")]
+    [TestCase(0,0, "South", 0,0,"South")]
+    [TestCase(0,5, "North", 0,5,"North")]
+    [TestCase(5,0, "East", 5,0,"East")]
+    public void GivenInValid_WhenMoveRobot_ThenIgnoreNextLocationOutsideOfTableTop(
+        int inputXLocation, int inputYLocation, string inputDirection, 
+        int expectedXLocation, int expectedYLocation, string expectedDirection)
+    {
+        var inDirection = Enum.Parse<Direction>(inputDirection);
+        var outDirection = Enum.Parse<Direction>(expectedDirection);
+        
+        var tableTop = new TableTop
+        {
+            Width = 5,
+            Height = 5
+        };
+
+        var robot = new Robot()
+        {
+            XLocation = inputXLocation,
+            YLocation = inputYLocation,
+            Direction = inDirection
+        }; 
+        
+        var robotService = new RobotService(tableTop);
+        var actualRobot = robotService.MoveRobot(robot);
+
+        actualRobot.XLocation.Should().Be(expectedXLocation);
+        actualRobot.YLocation.Should().Be(expectedYLocation);
+        actualRobot.Direction.Should().Be(outDirection);
+    }
 }

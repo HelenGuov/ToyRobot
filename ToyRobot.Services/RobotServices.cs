@@ -34,12 +34,28 @@ public class RobotService
         if (_robotMovements.ContainsKey(robot.Direction))
         {
             if (robot.Direction == Direction.North || robot.Direction == Direction.South)
-                return robot with {YLocation = robot.YLocation + _robotMovements[robot.Direction]};
+            {
+                var newYLocation = CalculateNextLocation(robot.YLocation, _tableTop.Height, robot.Direction);
+                return robot with {YLocation = newYLocation};
+            }
 
-            return robot with {XLocation = robot.XLocation + _robotMovements[robot.Direction] };
+            if (robot.Direction == Direction.East || robot.Direction == Direction.West)
+            {
+                var newXLocation = CalculateNextLocation(robot.XLocation, _tableTop.Width, robot.Direction);
+                return robot with {XLocation = newXLocation};
+            }
+
         }
 
         Console.WriteLine("Invalid direction"); 
         return new Robot(); 
+    }
+    
+    private int CalculateNextLocation(int currrentLocation, int maxLocation, Direction direction)
+    {
+        var newLocation = currrentLocation + _robotMovements[direction];
+        if (newLocation >= 0 && newLocation <= maxLocation)
+            return newLocation;
+        return currrentLocation; 
     }
 }
