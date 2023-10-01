@@ -60,31 +60,27 @@ public class RobotService
 
     public Robot MoveRobot(Robot robot)
     {
+        var newRobot = new Robot(); 
         if (_robotMovements.ContainsKey(robot.Direction) && robot.IsPlaced)
         {
             if (robot.Direction is Direction.North or Direction.South)
             {
-                var newYLocation = CalculateNextLocation(robot.YLocation, _tableTop.Height, robot.Direction);
-                return robot with {YLocation = newYLocation};
+                var newYLocation = robot.YLocation + _robotMovements[robot.Direction];
+                if (IsValidLocation(newYLocation, _tableTop.Height))
+                    newRobot = robot with {YLocation = newYLocation};
             }
             
             if (robot.Direction is Direction.East or Direction.West)
             {
-                var newXLocation = CalculateNextLocation(robot.XLocation, _tableTop.Width, robot.Direction);
-                return robot with {XLocation = newXLocation};
+                var newXLocation = robot.XLocation + _robotMovements[robot.Direction];
+                if (IsValidLocation(newXLocation, _tableTop.Width))
+                    newRobot = robot with {XLocation = newXLocation};
             }
+
+            return newRobot; 
         }
 
-        Console.WriteLine("Invalid direction"); 
         return new Robot(); 
-    }
-    
-    private int CalculateNextLocation(int currrentLocation, int maxLocation, Direction direction)
-    {
-        var newLocation = currrentLocation + _robotMovements[direction];
-        if (IsValidLocation(newLocation, maxLocation))
-            return newLocation;
-        return currrentLocation; 
     }
 
     private bool IsValidLocation(int location, int maxLocation) => (location >= 0 && location <= maxLocation); 

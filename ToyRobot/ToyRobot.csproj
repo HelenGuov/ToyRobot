@@ -7,4 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ToyRobot.Models\ToyRobot.Models.csproj" />
+      <ProjectReference Include="..\ToyRobot.Services\ToyRobot.Services.csproj" />
+    </ItemGroup>
+
 </Project>
